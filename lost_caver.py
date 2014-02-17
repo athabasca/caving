@@ -8,16 +8,29 @@
 # Things to note: falling off = death. i.e. 0 <= x <= 20, 0 <= y <= 16
 # Can assume instructions will lead to exit of cave.
 
+from sys import stdin # Assuming input is text stream from stdin.
+
+
 def main():
-	""" docstring """
-	
-	get_inital_pos()
-	
-	get_dir()
-	
-	move()
-	
-	report_back()
+    """ docstring """
+        
+    # get_inital_pos
+        
+    # get_instruction
+    dir = stdin.read(1)
+    while (dir != ""): # while not EOF
+        if dir == 'M':
+            # process movement
+        elif dir == 'L':
+            # turn left
+        elif dir == 'R':
+            # turn right
+        else:
+            # invalid instruction
+            
+    # move
+        
+    # report_back
 	
 if __name__ == '__main__':
-	main()
+    main()
