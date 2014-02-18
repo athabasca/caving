@@ -61,9 +61,13 @@ class TestLostCaver(unittest.TestCase):
         for char in whitespace: # test that whitespace is ignored
             self.assertEqual(lost_caver.move_caver(char, 5, 5, 0), (5, 5, 0))
             
-        bad_instructions = ['Q', 7, ":", "RUN"]
+        bad_instructions = ['Q', ":", "RUN"]
         for inst in bad_instructions:
             self.assertRaises(ValueError, lost_caver.move_caver, *(inst, 5, 5, 0))
+            
+        type_error_instructions = [7, 2.5, -30]
+        for inst in type_error_instructions:
+            self.assertRaises(TypeError, lost_caver.move_caver, *(inst, 5, 5, 0))
             
 if __name__ == '__main__':
     unittest.main()

@@ -16,7 +16,7 @@
 # message is printed. Otherwise, once there is no more input,
 # you will get a success message.
 
-from sys import stdin
+from sys import stdin, exc_info
 import re
 
 debug = False
@@ -35,7 +35,7 @@ def get_initial_position(line):
         if debug:
             print "x: {0}, y: {1}, heading: {2}".format(x, y, heading)
     else:
-        msg = "Need initial position and heading: (x, y) <h>\nLine: {0}\n"\
+        msg = "Need initial position and heading: (x, y) <h>\nInput line: {0}\n"\
                 .format(line)
         raise ValueError(msg)
     
@@ -54,7 +54,7 @@ def move_caver(instruction, x, y, heading):
     """ Get caver's new location given an instruction, print position. """
     
     if type(instruction) is not str:
-        raise ValueError("Invalid instruction: {0}\n".format(instruction))
+        raise TypeError("Invalid instruction: {0}\n".format(instruction))
         
     if instruction == 'M': # Move 1 in faced direction.
         if heading == 0:
@@ -97,11 +97,17 @@ def main():
     line = stdin.readline()
     
     if line == "": # no input given
-        raise EOFError("No input.")
+        print "Usage: (x, y) <heading> <instructions>"
+        exit(0)
 
     line = "".join(line.strip().split()) # Strip all whitespace.
     
-    x, y, heading = get_initial_position(line)
+    try:
+        x, y, heading = get_initial_position(line)
+    except ValueError:
+        print "Error: ",
+        print exc_info()[1]
+        exit(1)
             
     start = line.index(heading) + 1 # index of first instruction
     instructions = line[start:]
@@ -110,12 +116,23 @@ def main():
     heading = headings.index(heading)    
     
     for instruction in instructions:
-        x, y, heading = move_caver(instruction, x, y, heading)
+        try:
+            x, y, heading = move_caver(instruction, x, y, heading)
+        except (TypeError, ValueError):
+            print "Error: ",
+            print exc_info()[1]
+            exit(1)
         
     # Any subsequent lines from stdin should just be instructions.
     instruction = stdin.read(1)
     while (instruction != ""): # while not EOF
-        x, y, heading = move_caver(instruction, x, y, heading)
+        try:
+            x, y, heading = move_caver(instruction, x, y, heading)
+        except (TypeError, ValueError):
+            print "Error: ",
+            print exc_info()[1]
+            exit(1)
+            
         instruction = stdin.read(1)
         
     print "The caver made it to the exit at ({0}, {1})!".format(x, y)
