@@ -11,6 +11,8 @@
 # Input: (x, y) <heading> <string of instructions>
 # x, y are integers, heading is one of {N, E, S, W},
 # each character of instructions  is one of {M, L, R}.
+# Note: (x, y) <heading> must be on one line.
+#
 # Output: after each instruction is processed, coordinates
 # and heading are printed. If you go off the edge, a death
 # message is printed. Otherwise, once there is no more input,
